@@ -1,0 +1,45 @@
+{% extends "sponsorship_workflow/base.html" %} {% block content %}
+<div class="container mt-4 pt-5">
+  <h2>Sponsors</h2>
+  <table class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th>Company Name</th>
+        <th>Contact</th>
+        <th>Email</th>
+        <th>Phone Number</th>
+        <th>Status</th>
+        <th>Spend</th>
+        <th><!-- Edit/Delete Actions --></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for sponsor in sponsors %}
+      <tr>
+        <td>{{ sponsor.company_name }}</td>
+        <td>{{ sponsor.contact }}</td>
+        <td>{{ sponsor.email }}</td>
+        <td>{{ sponsor.phone_number }}</td>
+        <td>{{ sponsor.status }}</td>
+        <td>{{ sponsor.spend }}</td>
+        <td>
+          <a
+            href="{% url 'sponsor-update' sponsor.id %}"
+            class="btn btn-sm btn-primary"
+            >Edit</a
+          >
+          <a
+            href="{% url 'sponsor-delete' sponsor.id %}"
+            class="btn btn-sm btn-danger"
+            >Delete</a
+          >
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="{% url 'create_sponsor' %}" class="btn btn-success"
+    >Add New Sponsor</a
+  >
+</div>
+{% endblock %}

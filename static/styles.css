@@ -1,0 +1,19 @@
+/* Ensure the html and body take up full height */
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+/* Apply a gradient background to the body */
+body {
+  background: linear-gradient(to bottom right, #a67763, #f0e8e5);
+}
+
+.bg-custom {
+  background-color: #6a5650;
+}
+
+.bg-chart {
+  background-color: #f0e8e5;
+}
