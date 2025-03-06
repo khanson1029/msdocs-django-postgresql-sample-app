@@ -10,10 +10,58 @@ body {
   background: linear-gradient(to bottom right, #a67763, #f0e8e5);
 }
 
-.bg-custom {
+.bg-primary {
+  background-color: #a67763;
+}
+
+.bg-secondary {
   background-color: #6a5650;
 }
 
-.bg-chart {
+.bg-tertiary {
+  background-color: #b09382;
+}
+
+.bg-quaternary {
+  background-color: #436374;
+}
+
+.bg-quinary {
+  background-color: #869aa3;
+}
+
+.bg-highlight1 {
+  background-color: #ff9786;
+}
+
+.bg-highlight2 {
+  background-color: #9e4d8b;
+}
+
+.bg-highlight3 {
+  background-color: #0077a8;
+}
+
+.bg-highlight4 {
+  background-color: #d9ae48;
+}
+
+.bg-floral1 {
+  background-color: #7091c8;
+}
+
+.bg-floral2 {
+  background-color: #a691b9;
+}
+
+.bg-floral3 {
+  background-color: #9b8a50;
+}
+
+.bg-floral4 {
+  background-color: #d39c97;
+}
+
+.bg-customwhite {
   background-color: #f0e8e5;
 }
