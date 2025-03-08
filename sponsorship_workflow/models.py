@@ -13,3 +13,6 @@ class Sponsor(models.Model):
 
     def __str__(self):
         return self.company_name
+
+    def get_absolute_url(self):
+        return f'/sponsors'

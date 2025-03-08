@@ -41,9 +41,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'iommi'
 ]
 
 MIDDLEWARE = [
+    'iommi.sql_trace.Middleware',
+    'iommi.profiling.Middleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -51,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'iommi.middleware'
 ]
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
@@ -152,3 +156,14 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+from iommi import Style, Asset
+from iommi.style_bootstrap import bootstrap
+
+IOMMI_DEFAULT_STYLE = Style(
+    bootstrap,
+    base_template='sponsorship_workflow/iommi_base.html',
+    root__assets=dict(
+        my_project_custom_css=Asset.css(attrs__href='/static/styles.css'),
+    ),
+)

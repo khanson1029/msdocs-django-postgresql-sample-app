@@ -5,24 +5,65 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import cache_page
-
 from sponsorship_workflow.models import Sponsor
+from django.template.loader import get_template
+from iommi import *
+from .models import Sponsor
 
-# Create your views here.
+class SponsorPage(Page):
+    template = get_template('sponsorship_workflow/base.html')
+    sponsors = EditTable(
+        auto__model=Sponsor,
+        title=None,
+        container__attrs={
+        "class":
+            {
+                'pt-5': True,
+                'fw-b':True
+            }
+        },
+        columns__delete=Column.delete(
+            attr=None,
+            include=lambda request, **_: True,  
+            cell__url=lambda row, **_: f'sponsorsdelete/{row.pk}', 
+       ),
+        actions__save={
+            'display_name': None,
+            'post_handler': lambda request, table, **_: table.save(request),
+        },
+    )
 
-# def index(request):
-#     print('Request for index page received')
-#     restaurants = Restaurant.objects.annotate(avg_rating=Avg('review__rating')).annotate(review_count=Count('review'))
-#     lastViewedRestaurant = request.session.get("lastViewedRestaurant", False)
-#     return render(request, 'sponsorship_workflow/index.html', {'LastViewedRestaurant': lastViewedRestaurant, 'restaurants': restaurants})
+
 def index(request):
     print('Request for index page received')
-    return render(request, 'sponsorship_workflow/index.html')
+    sponsors=Sponsor.objects.all()
+    return render(request, 'sponsorship_workflow/index.html', {'sponsors':sponsors})
 
 def sponsors(request):
     print('Request for sponsors page received')
+    sponsors = Sponsor.objects.all()
+    context = {
+        'sponsors': sponsors,
+    }
+    return render(request, 'sponsorship_workflow/sponsors.html', context)
 
+def sponsor_update(request):
+    print('Request for sponsors page received')
+    sponsors = Sponsor.objects.all()
+    context = {
+        'sponsors': sponsors,
+    }
+    return render(request, 'sponsorship_workflow/sponsors.html', context)
+
+def sponsorsdelete(request,id):
+    print("hello")
+    # Retrieve and delete the sponsor
+    sponsor = get_object_or_404(Sponsor, pk=id)
+    sponsor.delete()
+    # Redirect back to your SponsorPage (replace 'sponsor_page' with your actual URL name)
     return render(request, 'sponsorship_workflow/sponsors.html')
+
+
 
 @cache_page(60)
 def details(request, id):
@@ -33,42 +74,31 @@ def details(request, id):
 
 def create_sponsor(request):
     print('Request for add sponsor page received')
-    return render(request, 'sponsorship_workflow/add_sponsor.html')
+    return render(request, 'sponsorship_workflow/create_sponsor.html')
 
 
 @csrf_exempt
 def add_sponsor(request):
-    # try:
-    #     name = request.POST['restaurant_name']
-    #     street_address = request.POST['street_address']
-    #     description = request.POST['description']
-    # except (KeyError):
-    #     # Redisplay the form
-    #     return render(request, 'sponsorship_workflow/add_restaurant.html', {
-    #         'error_message': "You must include a restaurant name, address, and description",
-    #     })
-    # else:
-    #     restaurant = Restaurant()
-    #     restaurant.name = name
-    #     restaurant.street_address = street_address
-    #     restaurant.description = description
-    #     Restaurant.save(restaurant)
-    #     Restaurant.save(restaurant)
     try:
-        name = request.POST['restaurant_name']
-        street_address = request.POST['street_address']
-        description = request.POST['description']
+        company = request.POST['company_name']
+        contact = request.POST['contact']
+        email = request.POST['email']
+        phone = request.POST['phone']
+        status = request.POST['status']
+        spend = request.POST['spend']
     except (KeyError):
         # Redisplay the form
         return render(request, 'sponsorship_workflow/add_restaurant.html', {
             'error_message': "You must include a restaurant name, address, and description",
         })
     else:
-        restaurant = Restaurant()
-        restaurant.name = name
-        restaurant.street_address = street_address
-        restaurant.description = description
-        Restaurant.save(restaurant)
-        Sponsor.save(restaurant)
+        sponsor = Sponsor()
+        sponsor.company_name = company
+        sponsor.contact = contact
+        sponsor.email = email
+        sponsor.phone_number = phone
+        sponsor.status = status
+        sponsor.spend = spend
+        Sponsor.save(sponsor)
 
-        return HttpResponseRedirect(reverse('details', args=(sponsor.id,)))
+        return HttpResponseRedirect(reverse('sponsors'))
